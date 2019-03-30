@@ -1,11 +1,9 @@
 var data;
 
 Papa.parse('resources/horario20191.csv', {
-  // header: true,
   download: true,
   dynamicTyping: true,
   complete: function(results) {
-    // console.log(results);
     data = results.data;
 	data = data.splice(3);
     data = process(data);
@@ -66,13 +64,20 @@ function examinateRow(row, result) {
 	var data = split(row, null);
 	var subject = {};
 	var _data = [];
+	var subject, numClass;
 	var days = ["monday", "tuesday", "wednesday", "thursday", "friday"];
 
 	for (var i = 0; i < data.length; i++) {
+		subject = numClass = "unknown";
 		_data = data[i];
+		if (_data[1]) {
+			subject = _data[1].slice(0, -3);
+			numClass = _data[1].slice(-2);
+		}
 		subject = {
 			"room": 		_data[0],
-			"subject": 		_data[1],
+			"subject": 		subject,
+			"class": 		numClass,
 			"teacher": 		_data[2], 
 			"type": 		_data[3],
 			"period": 		_data[4],
